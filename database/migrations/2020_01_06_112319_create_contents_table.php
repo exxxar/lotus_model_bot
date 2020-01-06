@@ -18,7 +18,7 @@ class CreateContentsTable extends Migration
             $table->string('title')->default('');
             $table->string('price')->default('');
             $table->string('image',500)->default('');
-            $table->text('description')->default('');
+            $table->string('description',5000)->default('');
             $table->integer('type')->default(1);
             $table->timestamps();
         });

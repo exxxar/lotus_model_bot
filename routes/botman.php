@@ -1,11 +1,11 @@
 <?php
 
+use App\Content;
 use App\Http\Controllers\BotManController;
 use App\User;
 use Illuminate\Support\Facades\Log;
 
 $botman = resolve('botman');
-
 
 
 function createUser($bot)
@@ -29,7 +29,8 @@ function createUser($bot)
     return $user;
 }
 
-function getDataFromApi($bot, $text = ""){
+function getDataFromApi($bot, $text = "")
+{
     $telegramUser = $bot->getUser();
     $id = $telegramUser->getId();
 
@@ -423,7 +424,8 @@ $botman->hears('.*Наши услуги', function ($bot) {
         ]);
 });
 
-function getContentByType($bot,$type){
+function getContentByType($bot, $type)
+{
     $telegramUser = $bot->getUser();
     $id = $telegramUser->getId();
 
@@ -432,7 +434,8 @@ function getContentByType($bot,$type){
     foreach ($content as $item) {
         $keyboard = [
             [
-                ['text' => "Записаться на курс\xE2\x98\x9D", "callback_data" => "/request ".$item->id],
+                ['text' => "Подробнее", "callback_data" => "/info " . $item->id],
+                ['text' => "Записаться\xE2\x98\x9D", "callback_data" => "/request " . $item->id],
             ],
 
         ];
@@ -442,7 +445,6 @@ function getContentByType($bot,$type){
                 "chat_id" => "$id",
                 "photo" => $item->image,
                 "parse_mode" => "Markdown",
-                "caption" => "*Цена*:" . $item->price . "\n_".$item->description."_",
                 'reply_markup' => json_encode([
                     'inline_keyboard' =>
                         $keyboard
@@ -453,11 +455,11 @@ function getContentByType($bot,$type){
 }
 
 $botman->hears('/basic', function ($bot) {
-   getContentByType(1);
+    getContentByType($bot, 1);
 });
 
 $botman->hears('/child', function ($bot) {
-    getContentByType(0);
+    getContentByType($bot, 0);
 });
 
 $botman->hears('/request ([0-9]+)', function ($bot) {
@@ -470,6 +472,46 @@ $botman->hears('Отправить анкету', function ($bot) {
 
 $botman->hears('Найти моделей', function ($bot) {
     $bot->reply("Раздел в разработке");
+});
+
+$botman->hears("/info ([0-9]+)", function ($bot, $courseId) {
+    $telegramUser = $bot->getUser();
+    $id = $telegramUser->getId();
+
+    $content = Content::find($courseId);
+
+
+    $keyboard = [
+        [
+            ['text' => "Записаться\xE2\x98\x9D", "callback_data" => "/request " . $content->id],
+        ],
+
+    ];
+
+
+    $bot->sendRequest("sendPhoto",
+        [
+            "chat_id" => "$id",
+            "photo" => $content->image,
+            "parse_mode" => "Markdown",
+            "caption" =>
+                "*" . $content->title . "*\n"
+                . "*Цена*:" . $content->price,
+
+        ]);
+
+    $bot->sendRequest("sendMessage",
+        [
+            "chat_id" => "$id",
+            "text" => "_".$content->description."_",
+            "parse_mode" => "Markdown",
+            'reply_markup' => json_encode([
+                'inline_keyboard' =>
+                    $keyboard
+            ])
+
+        ]);
+
 });
 
 $botman->hears('.*О нас', function ($bot) {
@@ -498,6 +540,6 @@ $botman->hears('.*О нас', function ($bot) {
         ]);
 });
 
-$botman->fallback(function($bot) {
+$botman->fallback(function ($bot) {
     $bot->reply('Данная возможность еще в разработке!');
 });
