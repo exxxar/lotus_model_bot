@@ -11,8 +11,15 @@
 |
 */
 
+use Telegram\Bot\Laravel\Facades\Telegram;
+
 Route::get('/', function () {
     return view('welcome');
+});
+
+Route::get('/test', function () {
+    $activity = Telegram::getUpdates();
+    dd($activity);
 });
 
 Route::match(['get', 'post'], '/botman', 'BotManController@handle');

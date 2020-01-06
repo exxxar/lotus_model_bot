@@ -88,7 +88,6 @@ function profileMenu($bot, $message)
     $telegramUser = $bot->getUser();
     $id = $telegramUser->getId();
 
-
     $profile_data = json_decode($bot->userStorage()->get("profile")) ?? null;
 
     $full_name = $profile_data->full_name ?? null;
@@ -114,9 +113,9 @@ function profileMenu($bot, $message)
 
     $keyboard_main = [
         ["Отправить анкету"],
-        ["Ф.И.О." . ($full_name == null ? "\xE2\x9D\x8E" : "\xE2\x9C\x85"), "Пол" . ($sex == null ? "\xE2\x9D\x8E" : "\xE2\x9C\x85")],
+        ["Ф.И.О.\xE2\x9D\x97" . ($full_name == null ? "\xE2\x9D\x8E" : "\xE2\x9C\x85"), "Пол" . ($sex == null ? "\xE2\x9D\x8E" : "\xE2\x9C\x85")],
         ["Рост" . ($height == null ? "\xE2\x9D\x8E" : "\xE2\x9C\x85"), "Вес" . ($weight == null ? "\xE2\x9D\x8E" : "\xE2\x9C\x85")],
-        ["Возраст" . ($age == null ? "\xE2\x9D\x8E" : "\xE2\x9C\x85"), "Город проживания" . ($city == null ? "\xE2\x9D\x8E" : "\xE2\x9C\x85")],
+        ["Возраст\xE2\x9D\x97" . ($age == null ? "\xE2\x9D\x8E" : "\xE2\x9C\x85"), "Город проживания" . ($city == null ? "\xE2\x9D\x8E" : "\xE2\x9C\x85")],
         ["Цвет глаз" . ($eye_color == null ? "\xE2\x9D\x8E" : "\xE2\x9C\x85"), "Цвет волос" . ($hair_color == null ? "\xE2\x9D\x8E" : "\xE2\x9C\x85")],
         ["Размер одежды" . ($clothing_size == null ? "\xE2\x9D\x8E" : "\xE2\x9C\x85"), "Размер обуви" . ($shoe_size == null ? "\xE2\x9D\x8E" : "\xE2\x9C\x85")],
     ];
@@ -181,9 +180,9 @@ function filterMenu($bot, $message)
 
     $keyboard_main = [
         ["Найти моделей"],
-        ["Ф.И.О." . ($full_name == null ? "\xE2\x9D\x8E" : "\xE2\x9C\x85"), "Пол" . ($sex == null ? "\xE2\x9D\x8E" : "\xE2\x9C\x85")],
+        ["Ф.И.О.\xE2\x9D\x97" . ($full_name == null ? "\xE2\x9D\x8E" : "\xE2\x9C\x85"), "Пол" . ($sex == null ? "\xE2\x9D\x8E" : "\xE2\x9C\x85")],
         ["Рост" . ($height == null ? "\xE2\x9D\x8E" : "\xE2\x9C\x85"), "Вес" . ($weight == null ? "\xE2\x9D\x8E" : "\xE2\x9C\x85")],
-        ["Возраст" . ($age == null ? "\xE2\x9D\x8E" : "\xE2\x9C\x85"), "Город проживания" . ($city == null ? "\xE2\x9D\x8E" : "\xE2\x9C\x85")],
+        ["Возраст\xE2\x9D\x97" . ($age == null ? "\xE2\x9D\x8E" : "\xE2\x9C\x85"), "Город проживания" . ($city == null ? "\xE2\x9D\x8E" : "\xE2\x9C\x85")],
         ["Цвет глаз" . ($eye_color == null ? "\xE2\x9D\x8E" : "\xE2\x9C\x85"), "Цвет волос" . ($hair_color == null ? "\xE2\x9D\x8E" : "\xE2\x9C\x85")],
         ["Размер одежды" . ($clothing_size == null ? "\xE2\x9D\x8E" : "\xE2\x9C\x85"), "Размер обуви" . ($shoe_size == null ? "\xE2\x9D\x8E" : "\xE2\x9C\x85")],
     ];
@@ -243,14 +242,37 @@ function modelsMenu($bot, $message)
         ]);
 }
 
+
+$botman->hears('Ф.И.О.*', BotManController::class . "@fullNameConversation");
+$botman->hears('Рост.*', BotManController::class . "@heightConversation");
+$botman->hears('Вес.*', BotManController::class . "@weightConversation");
+$botman->hears('Возраст.*', BotManController::class . "@ageConversation");
+$botman->hears('Цвет глаз.*', BotManController::class . "@eyeColorConversation");
+$botman->hears('Цвет волос.*', BotManController::class . "@hairColorConversation");
+$botman->hears('Город проживания.*', BotManController::class . "@cityConversation");
+$botman->hears('Размер одежды.*', BotManController::class . "@clothSizeConversation");
+$botman->hears('Размер обуви.*', BotManController::class . "@shoeSizeConversation");
+$botman->hears('Объем груди.*', BotManController::class . "@breastVolumeConversation");
+$botman->hears('Объем талии.*', BotManController::class . "@waistConversation");
+$botman->hears('Объем бёдер.*', BotManController::class . "@hipsConversation");
+$botman->hears('Ваше хобби.*', BotManController::class . "@hobbyConversation");
+$botman->hears('О вас.*', BotManController::class . "@aboutConversation");
+$botman->hears('Ваше образование.*', BotManController::class . "@educationConversation");
+$botman->hears('Отправить анкету', BotManController::class . "@applyAndSaveConversation");
+$botman->hears('/request ([0-9]+)', BotManController::class . "@phoneConversation");
+
 $botman->hears('Сбросить фильтр', function ($bot) {
-    $bot->userStorage("filter")->delete();
+    $bot->userStorage()->save([
+        "filter" => json_encode([])
+    ]);
     filterMenu($bot, "Вы сбросили фильтр");
 });
 
 $botman->hears('Сбросить анкету', function ($bot) {
-    $bot->userStorage("profile")->delete();
-    filterMenu($bot, "Вы очистил");
+    $bot->userStorage()->save([
+        "profile" => json_encode([])
+    ]);
+    filterMenu($bot, "Вы очистили свою анкету");
 });
 
 $botman->hears('/search|.*Поиск моделей', function ($bot) {
@@ -269,11 +291,11 @@ $botman->hears('/profile|.*Анкета модели', function ($bot) {
 
 $botman->hears('/start|.*Главное меню', function ($bot) {
     mainMenu($bot, "Lotus Model Agency | Lotus Kids");
-});
+})->stopsConversation();
 
 $botman->hears('/models|.*Список моделей', function ($bot) {
     modelsMenu($bot, "Список моделей по категориям");
-});
+})->stopsConversation();
 
 function getModelsByCategory($bot, $cat, $page)
 {
@@ -429,7 +451,7 @@ function getContentByType($bot, $type)
     $telegramUser = $bot->getUser();
     $id = $telegramUser->getId();
 
-    $content = \App\Content::where("type",$type)->get();
+    $content = \App\Content::where("type", $type)->get();
 
     foreach ($content as $item) {
         $keyboard = [
@@ -466,12 +488,142 @@ $botman->hears('/request ([0-9]+)', function ($bot) {
     $bot->reply("Раздел в разработке");
 });
 
-$botman->hears('Отправить анкету', function ($bot) {
-    $bot->reply("Раздел в разработке");
+function applyCustomFilter($bot, $page)
+{
+    $telegramUser = $bot->getUser();
+    $id = $telegramUser->getId();
+
+    $profile_data = json_decode($bot->userStorage()->get("filter")) ?? null;
+
+    $full_name = $profile_data->full_name ?? null;
+    $sex = $profile_data->sex ?? null;
+    $height = $profile_data->height ?? null;
+    $weight = $profile_data->weight ?? null;
+    $age = $profile_data->age ?? null;
+    $eye_color = $profile_data->eye_color ?? null;
+    $hair_color = $profile_data->hair_color ?? null;
+    $clothing_size = $profile_data->clothing_size ?? null;
+    $shoe_size = $profile_data->shoe_size ?? null;
+    $breast_volume = $profile_data->breast_volume ?? null;
+    $waist = $profile_data->waist ?? null;
+    $hips = $profile_data->hips ?? null;
+
+    $result = getDataFromApi($bot);
+
+    if ($full_name)
+        $result = array_filter($result, function ($var) use ($full_name) {
+            return strpos($var->username, $full_name) !== false;
+        });
+
+    if ($sex)
+        $result = array_filter($result, function ($var) use ($sex) {
+            return $var->parent = $sex == 0 ? 10 : 11;
+        });
+
+    if ($height)
+        $result = array_filter($result, function ($var) use ($height) {
+            return intval($var->user_data->height) == intval($height);
+        });
+
+    if ($weight)
+        $result = array_filter($result, function ($var) use ($weight) {
+            return intval($var->user_data->weight) == intval($weight);
+        });
+
+    if ($age)
+        $result = array_filter($result, function ($var) use ($age) {
+            return intval($var->user_data->age) == intval($age);
+        });
+
+    if ($breast_volume || $waist || $hips)
+        $result = array_filter($result, function ($var) use ($breast_volume, $waist, $hips) {
+            return strpos($var->user_data->params, $hips) !== false ||
+                strpos($var->user_data->params, $waist) !== false ||
+                strpos($var->user_data->params, $hips) !== false;
+        });
+
+    if ($eye_color)
+        $result = array_filter($result, function ($var) use ($eye_color) {
+            return substr($var->user_data->eye_color, $eye_color) !== false;
+        });
+
+    if ($clothing_size)
+        $result = array_filter($result, function ($var) use ($clothing_size) {
+            return substr($var->user_data->clothing_size, $clothing_size) !== false;
+        });
+
+    if ($hair_color)
+        $result = array_filter($result, function ($var) use ($hair_color) {
+            return substr($var->user_data->hair_color, $hair_color) !== false;
+        });
+
+    if ($shoe_size)
+        $result = array_filter($result, function ($var) use ($shoe_size) {
+            return substr($var->user_data->shoe_size, $shoe_size) !== false;
+        });
+
+
+    $result = array_slice($result, $page * 10, min(max(count($result) - $page * 10, 0), 10));
+
+    if (count($result)!=0) {
+        ini_set('max_execution_time', 1000000);
+        foreach ($result as $key => $model) {
+
+            $keyboard = [
+                [
+                    ['text' => "\xF0\x9F\x83\x8FИнформация о модели", 'callback_data' => "/model_info " . $model->id]
+                ]
+            ];
+
+            $bot->sendRequest("sendPhoto",
+                [
+                    "chat_id" => "$id",
+                    "photo" => "http://lotus-model.ru/" . $model->user_data->main_photo,
+                    'reply_markup' => json_encode([
+                        'inline_keyboard' =>
+                            $keyboard
+                    ])
+                ]);
+        }
+    }
+    else
+        $bot->reply("Нет подходящих моделей!");
+
+    $keyboard = [];
+
+    if ($page == 0 && count($result) == 10)
+        array_push($keyboard, [
+            ['text' => "\xE2\x8F\xA9Следующая страница", 'callback_data' => "/search_models " . ($page + 1)]
+        ]);
+    if ($page != 0 && count($result) == 10)
+        array_push($keyboard, [
+            ['text' => "\xE2\x8F\xAAПредидушая страница", 'callback_data' => "/search_models " . ($page - 1)],
+            ['text' => "\xE2\x8F\xA9Следующая страница", 'callback_data' => "/search_models " . ($page + 1)]
+        ]);
+    if ($page != 0 && count($result) < 10)
+        array_push($keyboard, [
+            ['text' => "\xE2\x8F\xAAСледующая страница", 'callback_data' => "/search_models " . ($page - 1)],
+        ]);
+
+    if (count($keyboard) > 0)
+        $bot->sendRequest("sendMessage",
+            [
+                "chat_id" => "$id",
+                "text" => "Ваши действия",
+                'reply_markup' => json_encode([
+                    'inline_keyboard' =>
+                        $keyboard
+                ])
+            ]);
+    ini_set('max_execution_time', 60);
+}
+
+$botman->hears('/search_models ([0-9]+)', function ($bot, $page) {
+    applyCustomFilter($bot, $page);
 });
 
 $botman->hears('Найти моделей', function ($bot) {
-    $bot->reply("Раздел в разработке");
+    applyCustomFilter($bot, 0);
 });
 
 $botman->hears("/info ([0-9]+)", function ($bot, $courseId) {
@@ -503,7 +655,7 @@ $botman->hears("/info ([0-9]+)", function ($bot, $courseId) {
     $bot->sendRequest("sendMessage",
         [
             "chat_id" => "$id",
-            "text" => "_".$content->description."_",
+            "text" => "_" . $content->description . "_",
             "parse_mode" => "Markdown",
             'reply_markup' => json_encode([
                 'inline_keyboard' =>
@@ -540,6 +692,99 @@ $botman->hears('.*О нас', function ($bot) {
         ]);
 });
 
-$botman->fallback(function ($bot) {
+/*$botman->fallback(function ($bot) {
     $bot->reply('Данная возможность еще в разработке!');
+});*/
+
+
+$botman->hears('Обучались в модельной школе?.*', function ($bot) {
+    $telegramUser = $bot->getUser();
+    $id = $telegramUser->getId();
+
+    $keyboard = [
+        [
+            ['text' => "Да,обучался\xF0\x9F\x91\x8D", "callback_data" => "/set_profile 1 model_school_education"],
+            ['text' => "Нет, не обучался\xF0\x9F\x91\x8E", "callback_data" => "/set_profile 0 model_school_education"],
+        ],
+
+    ];
+    $bot->sendRequest("sendMessage",
+        [
+            "chat_id" => "$id",
+            "text" => "Укажите своё желание обучаться",
+            "parse_mode" => "Markdown",
+            'reply_markup' => json_encode([
+                'inline_keyboard' => $keyboard,
+            ])
+        ]);
 });
+$botman->hears('Пол.*', function ($bot) {
+    $telegramUser = $bot->getUser();
+    $id = $telegramUser->getId();
+
+    $keyboard = [
+        [
+            ['text' => "Парень\xF0\x9F\x91\xA6", "callback_data" => "/set_profile 0 sex"],
+            ['text' => "Девушка\xF0\x9F\x91\xA7", "callback_data" => "/set_profile 1 sex"],
+        ],
+
+    ];
+    $bot->sendRequest("sendMessage",
+        [
+            "chat_id" => "$id",
+            "text" => "Укажите свой пол",
+            "parse_mode" => "Markdown",
+            'reply_markup' => json_encode([
+                'inline_keyboard' => $keyboard,
+            ])
+        ]);
+});
+$botman->hears('Желание обучаться.*', function ($bot) {
+    $telegramUser = $bot->getUser();
+    $id = $telegramUser->getId();
+
+    $keyboard = [
+        [
+            ['text' => "Хочу обучаться\xF0\x9F\x91\x8D", "callback_data" => "/set_profile 1 wish_learn"],
+            ['text' => "Не хочу обучаться\xF0\x9F\x91\x8E", "callback_data" => "/set_profile 0 wish_learn"],
+        ],
+
+    ];
+    $bot->sendRequest("sendMessage",
+        [
+            "chat_id" => "$id",
+            "text" => "Укажите своё желание обучаться",
+            "parse_mode" => "Markdown",
+            'reply_markup' => json_encode([
+                'inline_keyboard' => $keyboard,
+            ])
+        ]);
+});
+
+$botman->hears('/set_profile ([0-9]+) ([0-9a-zA-Z _]+)', function ($bot, $value, $index) {
+    Log::info("step1");
+    $type = $bot->userStorage()->get("type");
+
+    Log::info($index . "=" . $value);
+    $item = json_decode($type == 0 ?
+        $bot->userStorage()->get("filter") :
+        $bot->userStorage()->get("profile"), true
+    );
+
+    $item[$index] = $value;
+
+    Log::info(print_r($item, true));
+
+    if ($type == 0) {
+        $bot->userStorage()->save([
+            'filter' => json_encode($item)
+        ]);
+        filterMenu($bot, "Данные в фильтре обновлены!");
+    } else {
+        $bot->userStorage()->save([
+            'profile' => json_encode($item)
+        ]);
+        profileMenu($bot, "Данные в профиле обновлены!");
+    }
+});
+
