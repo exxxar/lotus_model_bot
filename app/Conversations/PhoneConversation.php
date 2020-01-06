@@ -58,6 +58,7 @@ class PhoneConversation extends Conversation
                 'chat_id' => "-1001176319167",
                 'parse_mode' => 'Markdown',
                 'text' => "Заявка на курсы:\n"
+                    . "*Телефон:*" . ($tmp_phone ?? 'Не указано') . "\n"
                     . "*Имя пользователя:*" . ($user->name ?? $user->name_from_telegram ?? 'Не указано') . "\n"
                     . "*Название курса:*" . ($course->title ?? 'Не указано') . "\n"
                     . "*Цена курса:*" . ($course->price ?? 'Не указано') . "\n"
