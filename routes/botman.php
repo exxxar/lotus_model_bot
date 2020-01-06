@@ -14,15 +14,15 @@ const MENU = [
         "image" => "https://sun9-38.userapi.com/c850728/v850728456/c8164/0NrWXJh-07o.jpg",
         "description" =>
             'курс "LONDОN" для парней от 14 до 25 лет
-            -курс длится 3 месяца
-            -в курс входят 7 дисциплин
-            -занятия проходят 2-3 раза в неделю
-            -длительность 1-ого занятия 2 часа
-            -стоимость обучения 2500 руб./мес.
-            -на протяжении всего обучения (по желанию) Вас привлекают к участию в различных мероприятиях (в зависимости от требований заказчика)
-            -по окончанию обучения модель получает диплом на 2-х языках и именную карту со скидками от партнеров агенства
-            -выпускной проходит в виде fashion показа
-            -по Вашему желанию менеджер Lotus Model Agency подбирает наиболее подходящий контракт для работы за границей
+-курс длится 3 месяца
+-в курс входят 7 дисциплин
+-занятия проходят 2-3 раза в неделю
+-длительность 1-ого занятия 2 часа
+-стоимость обучения 2500 руб./мес.
+-на протяжении всего обучения (по желанию) Вас привлекают к участию в различных мероприятиях (в зависимости от требований заказчика)
+-по окончанию обучения модель получает диплом на 2-х языках и именную карту со скидками от партнеров агенства
+-выпускной проходит в виде fashion показа
+-по Вашему желанию менеджер Lotus Model Agency подбирает наиболее подходящий контракт для работы за границей
 '
     ],
     [
@@ -484,6 +484,33 @@ $botman->hears('.*Наши услуги', function ($bot) {
     $telegramUser = $bot->getUser();
     $id = $telegramUser->getId();
 
+    $keyboard = [
+        [
+            ['text' => "Обучение для взрослых", "callback_data" => "/basic"],
+        ],
+        [
+            ['text' => "Обучение для детей", "callback_data" => "/child"],
+        ],
+        [
+            ['text' => "Другие услуги", "callback_data" => "/other"],
+        ],
+
+    ];
+    $bot->sendRequest("sendMessage",
+        [
+            "chat_id" => "$id",
+            "text" => "Мы в соц. сетях",
+            "parse_mode" => "Markdown",
+            'reply_markup' => json_encode([
+                'inline_keyboard' => $keyboard,
+            ])
+        ]);
+});
+
+$botman->hears('/basic', function ($bot) {
+    $telegramUser = $bot->getUser();
+    $id = $telegramUser->getId();
+
     foreach (MENU as $item) {
         $keyboard = [
             [
@@ -507,9 +534,16 @@ $botman->hears('.*Наши услуги', function ($bot) {
     }
 });
 
-$botman->hears('/request ([0-9]+)', function ($bot,$requestId) {
+$botman->hears('/request ([0-9]+)', function ($bot) {
+    $bot->reply("Раздел в разработке");
+});
 
+$botman->hears('Отправить анкету', function ($bot) {
+    $bot->reply("Раздел в разработке");
+});
 
+$botman->hears('Найти моделей', function ($bot) {
+    $bot->reply("Раздел в разработке");
 });
 
 $botman->hears('.*О нас', function ($bot) {
@@ -522,6 +556,9 @@ $botman->hears('.*О нас', function ($bot) {
             ['text' => "Мы в Instagram", "url" => "https://www.instagram.com/lotus_model_agency/"],
             ['text' => "Мы в Vkontake", "url" => "https://vk.com/lotus_model_agency"],
         ],
+        [
+            ['text' => "Получай скидки на обучение и не только!", "url" => "https://t.me/skidki_dn_bot"],
+        ]
 
     ];
     $bot->sendRequest("sendMessage",
@@ -533,4 +570,8 @@ $botman->hears('.*О нас', function ($bot) {
                 'inline_keyboard' => $keyboard,
             ])
         ]);
+});
+
+$botman->fallback(function($bot) {
+    $bot->reply('Данная возможность еще в разработке!');
 });
