@@ -432,7 +432,7 @@ function getContentByType($bot,$type){
     foreach ($content as $item) {
         $keyboard = [
             [
-                ['text' => "Записаться на курс\xE2\x98\x9D", "callback_data" => "/request ".$item["id"]],
+                ['text' => "Записаться на курс\xE2\x98\x9D", "callback_data" => "/request ".$item->id],
             ],
 
         ];
@@ -440,9 +440,9 @@ function getContentByType($bot,$type){
         $bot->sendRequest("sendPhoto",
             [
                 "chat_id" => "$id",
-                "photo" => $item["image"],
+                "photo" => $item->image,
                 "parse_mode" => "Markdown",
-                "caption" => "*Цена*:" . $item["price"] . "\n_".$item["description"]."_",
+                "caption" => "*Цена*:" . $item->price . "\n_".$item->description."_",
                 'reply_markup' => json_encode([
                     'inline_keyboard' =>
                         $keyboard
