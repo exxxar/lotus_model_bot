@@ -484,10 +484,6 @@ $botman->hears('/child', function ($bot) {
     getContentByType($bot, 0);
 });
 
-$botman->hears('/request ([0-9]+)', function ($bot) {
-    $bot->reply("Раздел в разработке");
-});
-
 function applyCustomFilter($bot, $page)
 {
     $telegramUser = $bot->getUser();
