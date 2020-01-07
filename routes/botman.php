@@ -272,7 +272,7 @@ $botman->hears('Очистить анкету', function ($bot) {
     $bot->userStorage()->save([
         "profile" => json_encode([])
     ]);
-    filterMenu($bot, "Вы очистили свою анкету");
+    profileMenu($bot, "Вы очистили свою анкету");
 });
 
 $botman->hears('/search|.*Поиск моделей', function ($bot) {
