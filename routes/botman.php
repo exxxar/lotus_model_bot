@@ -346,7 +346,7 @@ function getModelsByCategory($bot, $cat, $page)
         ]);
     if ($page != 0 && count($result) < 10)
         array_push($keyboard, [
-            ['text' => "\xE2\x8F\xAAСледующая страница", 'callback_data' => "/all_models " . ($page - 1) . " " . $cat],
+            ['text' => "\xE2\x8F\xAAПредидущая страница", 'callback_data' => "/all_models " . ($page - 1) . " " . $cat],
         ]);
 
     $bot->sendRequest("sendMessage",
@@ -598,7 +598,7 @@ function applyCustomFilter($bot, $page)
         ]);
     if ($page != 0 && count($result) < 10)
         array_push($keyboard, [
-            ['text' => "\xE2\x8F\xAAСледующая страница", 'callback_data' => "/search_models " . ($page - 1)],
+            ['text' => "\xE2\x8F\xAAПредидущая страница", 'callback_data' => "/search_models " . ($page - 1)],
         ]);
 
     if (count($keyboard) > 0)
