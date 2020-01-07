@@ -506,54 +506,54 @@ function applyCustomFilter($bot, $page)
 
     $result = getDataFromApi($bot);
 
-    if ($full_name)
+    if ($full_name!=null)
         $result = array_filter($result, function ($var) use ($full_name) {
             return strpos($var->username, $full_name) !== false;
         });
 
-    if ($sex)
+    if ($sex!=null)
         $result = array_filter($result, function ($var) use ($sex) {
-            return $var->parent = $sex == 0 ? 10 : 11;
+            return $var->parent == ($sex == 0 ? 10 : 11);
         });
 
-    if ($height)
+    if ($height!=null)
         $result = array_filter($result, function ($var) use ($height) {
             return intval($var->user_data->height) == intval($height);
         });
 
-    if ($weight)
+    if ($weight!=null)
         $result = array_filter($result, function ($var) use ($weight) {
             return intval($var->user_data->weight) == intval($weight);
         });
 
-    if ($age)
+    if ($age!=null)
         $result = array_filter($result, function ($var) use ($age) {
             return intval($var->user_data->age) == intval($age);
         });
 
-    if ($breast_volume || $waist || $hips)
+    if ($breast_volume!=null || $waist!=null || $hips!=null)
         $result = array_filter($result, function ($var) use ($breast_volume, $waist, $hips) {
             return strpos($var->user_data->params, $hips) !== false ||
                 strpos($var->user_data->params, $waist) !== false ||
                 strpos($var->user_data->params, $hips) !== false;
         });
 
-    if ($eye_color)
+    if ($eye_color!=null)
         $result = array_filter($result, function ($var) use ($eye_color) {
             return substr($var->user_data->eye_color, $eye_color) !== false;
         });
 
-    if ($clothing_size)
+    if ($clothing_size!=null)
         $result = array_filter($result, function ($var) use ($clothing_size) {
             return substr($var->user_data->clothing_size, $clothing_size) !== false;
         });
 
-    if ($hair_color)
+    if ($hair_color!=null)
         $result = array_filter($result, function ($var) use ($hair_color) {
             return substr($var->user_data->hair_color, $hair_color) !== false;
         });
 
-    if ($shoe_size)
+    if ($shoe_size!=null)
         $result = array_filter($result, function ($var) use ($shoe_size) {
             return substr($var->user_data->shoe_size, $shoe_size) !== false;
         });
