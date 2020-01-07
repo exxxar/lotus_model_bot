@@ -77,13 +77,12 @@ trait CustomConversation
 
     public function profileMenu($message)
     {
-        Log::info("profile 0");
+
         $telegramUser = $this->bot->getUser();
         $id = $telegramUser->getId();
 
         $profile_data = json_decode($this->bot->userStorage()->get("profile")) ?? null;
 
-        Log::info("profile 1");
         $full_name = $profile_data->full_name ?? null;
         $sex = $profile_data->sex ?? null;
         $height = $profile_data->height ?? null;
@@ -105,7 +104,7 @@ trait CustomConversation
         $hobby = $profile_data->hobby ?? null;
 
 
-        Log::info("profile 2");
+
         $keyboard_main = [
             ["Отправить анкету"],
             ["Ф.И.О." . ($full_name == null ? "\xE2\x9D\x8E" : "\xE2\x9C\x85"), "Пол" . ($sex == null ? "\xE2\x9D\x8E" : "\xE2\x9C\x85")],
@@ -127,6 +126,7 @@ trait CustomConversation
         ];
 
         $keyboard_bottom = [
+            ["Очистить анкету"],
             ["Главное меню"],
         ];
 
@@ -166,7 +166,6 @@ trait CustomConversation
         $height = $profile_data->height ?? null;
         $weight = $profile_data->weight ?? null;
         $age = $profile_data->age ?? null;
-        $city = $profile_data->city ?? null;
         $eye_color = $profile_data->eye_color ?? null;
         $hair_color = $profile_data->hair_color ?? null;
         $clothing_size = $profile_data->clothing_size ?? null;
@@ -180,7 +179,7 @@ trait CustomConversation
             ["Найти моделей"],
             ["Ф.И.О." . ($full_name == null ? "\xE2\x9D\x8E" : "\xE2\x9C\x85"), "Пол" . ($sex == null ? "\xE2\x9D\x8E" : "\xE2\x9C\x85")],
             ["Рост" . ($height == null ? "\xE2\x9D\x8E" : "\xE2\x9C\x85"), "Вес" . ($weight == null ? "\xE2\x9D\x8E" : "\xE2\x9C\x85")],
-            ["Возраст" . ($age == null ? "\xE2\x9D\x8E" : "\xE2\x9C\x85"), "Город проживания" . ($city == null ? "\xE2\x9D\x8E" : "\xE2\x9C\x85")],
+            ["Возраст" . ($age == null ? "\xE2\x9D\x8E" : "\xE2\x9C\x85")],
             ["Цвет глаз" . ($eye_color == null ? "\xE2\x9D\x8E" : "\xE2\x9C\x85"), "Цвет волос" . ($hair_color == null ? "\xE2\x9D\x8E" : "\xE2\x9C\x85")],
             ["Размер одежды" . ($clothing_size == null ? "\xE2\x9D\x8E" : "\xE2\x9C\x85"), "Размер обуви" . ($shoe_size == null ? "\xE2\x9D\x8E" : "\xE2\x9C\x85")],
         ];

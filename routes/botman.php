@@ -132,6 +132,7 @@ function profileMenu($bot, $message)
     ];
 
     $keyboard_bottom = [
+        ["Очистить анкету"],
         ["Главное меню"],
     ];
 
@@ -168,7 +169,6 @@ function filterMenu($bot, $message)
     $height = $profile_data->height ?? null;
     $weight = $profile_data->weight ?? null;
     $age = $profile_data->age ?? null;
-    $city = $profile_data->city ?? null;
     $eye_color = $profile_data->eye_color ?? null;
     $hair_color = $profile_data->hair_color ?? null;
     $clothing_size = $profile_data->clothing_size ?? null;
@@ -182,8 +182,8 @@ function filterMenu($bot, $message)
         ["Найти моделей"],
         ["Ф.И.О.\xE2\x9D\x97" . ($full_name == null ? "\xE2\x9D\x8E" : "\xE2\x9C\x85"), "Пол" . ($sex == null ? "\xE2\x9D\x8E" : "\xE2\x9C\x85")],
         ["Рост" . ($height == null ? "\xE2\x9D\x8E" : "\xE2\x9C\x85"), "Вес" . ($weight == null ? "\xE2\x9D\x8E" : "\xE2\x9C\x85")],
-        ["Возраст\xE2\x9D\x97" . ($age == null ? "\xE2\x9D\x8E" : "\xE2\x9C\x85"), "Город проживания" . ($city == null ? "\xE2\x9D\x8E" : "\xE2\x9C\x85")],
-        ["Цвет глаз" . ($eye_color == null ? "\xE2\x9D\x8E" : "\xE2\x9C\x85"), "Цвет волос" . ($hair_color == null ? "\xE2\x9D\x8E" : "\xE2\x9C\x85")],
+        ["Возраст\xE2\x9D\x97" . ($age == null ? "\xE2\x9D\x8E" : "\xE2\x9C\x85")],
+        [ "Цвет волос" . ($hair_color == null ? "\xE2\x9D\x8E" : "\xE2\x9C\x85")],
         ["Размер одежды" . ($clothing_size == null ? "\xE2\x9D\x8E" : "\xE2\x9C\x85"), "Размер обуви" . ($shoe_size == null ? "\xE2\x9D\x8E" : "\xE2\x9C\x85")],
     ];
 
@@ -268,7 +268,7 @@ $botman->hears('Сбросить фильтр', function ($bot) {
     filterMenu($bot, "Вы сбросили фильтр");
 });
 
-$botman->hears('Сбросить анкету', function ($bot) {
+$botman->hears('Очистить анкету', function ($bot) {
     $bot->userStorage()->save([
         "profile" => json_encode([])
     ]);
